@@ -131,7 +131,8 @@ namespace ResourceGroups.Tests
             Assert.IsNull(request.Content);
 
             // Validate response
-            Assert.NotNull(result);
+            Assert.IsTrue(result.Value);
+            Assert.AreEqual(204, result.GetRawResponse().Status);
         }
 
         [Test]
@@ -149,7 +150,8 @@ namespace ResourceGroups.Tests
             Assert.IsNull(request.Content);
 
             // Validate response
-            Assert.AreEqual(404, result.Status);
+            Assert.IsFalse(result.Value);
+            Assert.AreEqual(404, result.GetRawResponse().Status);
         }
 
         [Test]

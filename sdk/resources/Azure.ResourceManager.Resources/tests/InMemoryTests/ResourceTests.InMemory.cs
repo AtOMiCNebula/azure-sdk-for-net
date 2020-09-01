@@ -620,7 +620,8 @@ namespace ResourceGroups.Tests
             Assert.IsTrue(request.Headers.Contains("Authorization"));
 
             // Validate result
-            Assert.NotNull(result);
+            Assert.IsTrue(result.Value);
+            Assert.AreEqual(204, result.GetRawResponse().Status);
         }
 
         [Test]
@@ -652,7 +653,8 @@ namespace ResourceGroups.Tests
             Assert.IsTrue(request.Headers.Contains("Authorization"));
 
             // Validate result
-            Assert.NotNull(result);
+            Assert.IsFalse(result.Value);
+            Assert.AreEqual(404, result.GetRawResponse().Status);
         }
 
         [Test]
