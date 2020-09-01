@@ -155,12 +155,13 @@ namespace Azure.Core
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            if (IsUndefined)
+            if (IsUndefined || !EnsureDictionary().TryGetValue(key, out TValue v))
             {
                 value = default!;
                 return false;
             }
-            return EnsureDictionary().TryGetValue(key, out value);
+            value = v;
+            return true;
         }
 
         public TValue this[TKey key]
