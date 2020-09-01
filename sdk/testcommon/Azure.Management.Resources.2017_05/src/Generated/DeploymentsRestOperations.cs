@@ -147,7 +147,7 @@ namespace Azure.Management.Resources
         /// <param name="deploymentName"> The name of the deployment to check. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupName"/> or <paramref name="deploymentName"/> is null. </exception>
-        public async Task<Response> CheckExistenceAsync(string resourceGroupName, string deploymentName, CancellationToken cancellationToken = default)
+        public async Task<Response<bool>> CheckExistenceAsync(string resourceGroupName, string deploymentName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -164,7 +164,8 @@ namespace Azure.Management.Resources
             {
                 case 204:
                 case 404:
-                    return message.Response;
+                    bool value = message.Response.Status >= 200 && message.Response.Status < 300;
+                    return Response.FromValue(value, message.Response);
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
             }
@@ -175,7 +176,7 @@ namespace Azure.Management.Resources
         /// <param name="deploymentName"> The name of the deployment to check. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="resourceGroupName"/> or <paramref name="deploymentName"/> is null. </exception>
-        public Response CheckExistence(string resourceGroupName, string deploymentName, CancellationToken cancellationToken = default)
+        public Response<bool> CheckExistence(string resourceGroupName, string deploymentName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -192,7 +193,8 @@ namespace Azure.Management.Resources
             {
                 case 204:
                 case 404:
-                    return message.Response;
+                    bool value = message.Response.Status >= 200 && message.Response.Status < 300;
+                    return Response.FromValue(value, message.Response);
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
             }

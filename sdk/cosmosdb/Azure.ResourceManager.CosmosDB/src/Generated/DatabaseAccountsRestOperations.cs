@@ -1214,7 +1214,7 @@ namespace Azure.ResourceManager.CosmosDB
         /// <param name="accountName"> Cosmos DB database account name. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="accountName"/> is null. </exception>
-        public async Task<Response> CheckNameExistsAsync(string accountName, CancellationToken cancellationToken = default)
+        public async Task<Response<bool>> CheckNameExistsAsync(string accountName, CancellationToken cancellationToken = default)
         {
             if (accountName == null)
             {
@@ -1227,7 +1227,8 @@ namespace Azure.ResourceManager.CosmosDB
             {
                 case 200:
                 case 404:
-                    return message.Response;
+                    bool value = message.Response.Status >= 200 && message.Response.Status < 300;
+                    return Response.FromValue(value, message.Response);
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
             }
@@ -1237,7 +1238,7 @@ namespace Azure.ResourceManager.CosmosDB
         /// <param name="accountName"> Cosmos DB database account name. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="accountName"/> is null. </exception>
-        public Response CheckNameExists(string accountName, CancellationToken cancellationToken = default)
+        public Response<bool> CheckNameExists(string accountName, CancellationToken cancellationToken = default)
         {
             if (accountName == null)
             {
@@ -1250,7 +1251,8 @@ namespace Azure.ResourceManager.CosmosDB
             {
                 case 200:
                 case 404:
-                    return message.Response;
+                    bool value = message.Response.Status >= 200 && message.Response.Status < 300;
+                    return Response.FromValue(value, message.Response);
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
             }
